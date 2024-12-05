@@ -8,6 +8,7 @@ class File(Base):
 
     id = Column(BigInteger, primary_key=True, autoincrement=True)
     user_id = Column(BigInteger, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    key = Column(String(500), nullable=False)
     file_url = Column(String(2048), nullable=False)
     created_at = Column(TIMESTAMP, server_default=func.current_timestamp())
 
