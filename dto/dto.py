@@ -16,14 +16,11 @@ class UserDeleteRequest(BaseModel):
 
 ### file
 class FileUploadRequest(BaseModel):
-    key: str
-    file_body: bytes
+    file_name: str
+    file_content: bytes
     
 class FileDeleteRequest(BaseModel):
-    file_names: List[str]
-
-class GetFileListRequest(BaseModel):
-    user_id: int
+    file_ids: List[int]
 
 class FileItem(BaseModel):
     id: int
@@ -33,5 +30,5 @@ class FileItem(BaseModel):
     created_at: datetime
     updated_at: datetime
     
-class GetFileListREponse(BaseModel):
+class GetFileListResponse(BaseModel):
     data: List[FileItem]

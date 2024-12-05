@@ -7,7 +7,7 @@ from ..utils.database import get_db
 router = APIRouter(prefix='/auth', tags=['user'])
 
 @router.post('/login', description='로그인')
-async def login(
+def login(
     request: Request,
     request_body: UserLoginReqeust,
     db: Session = Depends(get_db),
@@ -26,9 +26,20 @@ async def login(
     except Exception as e:
         raise HTTPException(status_code=400, detail=e)
 
+@router.post('/logout', description='로그아웃')
+def logout(
+    request: Request,
+):
+    try:
+        del request.session['user_id']
+        del request.session['user_email']
+        
+        return
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=e)
 
 @router.post('/join', description='회원 가입')
-async def join(
+def join(
     request_body: UserJoinRequest,
     db: Session = Depends(get_db),
 ):
@@ -41,7 +52,7 @@ async def join(
         raise HTTPException(status_code=400, detail=e)
     
 @router.post('/withdrawal', description='회원 탈퇴')
-async def withdrawal(
+def withdrawal(
     request_body: UserDeleteRequest,
     db: Session = Depends(get_db),
 ):
