@@ -38,14 +38,18 @@ class FileService:
         s3_objects = [{'Key': file_name} for file_name in file_names]
 
         try:
-            self.s3_client.delete_objects(
+            s3_response = self.s3_client.delete_objects(
                 Bucket=self.bucket_name,
                 Delete={
                     'Objects': s3_objects,
                     'Quiet': True
                 }
             )
-            return
+            
+            if s3_response['ResponseMetadata']['HTTPStatusCode'] == 200:
+                return
+            else:
+                raise RuntimeError("S3 error")
         except Exception as e:
             raise Exception(f"S3 error: {str(e)}")
 
