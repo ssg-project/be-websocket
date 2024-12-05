@@ -38,9 +38,19 @@ class UserService:
             self.db.rollback()
             raise Exception(f"Database error: {str(e)}")
     
-    def get_user(self, user_id: int):
+    def get_user_by_id(self, user_id: int):
         try:
             query = self.db.query(User).filter(User.id == user_id)
+            user = query.first()
+                        
+            return user
+        except SQLAlchemyError as e:
+            self.db.rollback()
+            raise Exception(f"Database error: {str(e)}")
+
+    def get_user_by_email(self, email: str):
+        try:
+            query = self.db.query(User).filter(User.email == email)
             user = query.first()
                         
             return user
