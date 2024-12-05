@@ -9,13 +9,13 @@ class StorageService:
     def __init__(self, db: Session):
         self.db = db
 
-    def insert_db_user(self, email: str, password: str, storage_id: int):
+    def insert_db_user(self, email: str, password: str):
         try:
             new_user = User(
                 email=email,
                 password=password,
-                storage_id=storage_id,
             )
+
             self.db.add(new_user)
             self.db.commit()
             self.db.refresh(new_user)
@@ -28,16 +28,15 @@ class StorageService:
     def delete_db_user(self, user_id: int):
         try:
             query = self.db.query(User).filter(User.id == user_id)
-
             user_to_delete = query.first()
+
             self.db.delete(user_to_delete)
             self.db.commit()
 
-            print(f"User with ID {user_to_delete.id} and email '{user_to_delete.email}' deleted successfully.")
             return user_to_delete
         except SQLAlchemyError as e:
             self.db.rollback()
-            raise Exception(f"Database error during deletion: {str(e)}")
+            raise Exception(f"Database error: {str(e)}")
     
     def get_user(self, user_id: int):
         try:
@@ -47,4 +46,4 @@ class StorageService:
             return user
         except SQLAlchemyError as e:
             self.db.rollback()
-            raise Exception(f"Database error during deletion: {str(e)}")
+            raise Exception(f"Database error: {str(e)}")
