@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
-from ..services.file_service import FileService
-from ..services.user_service import UserService
-from ..dto.dto import *
-from ..utils.database import get_db
+from services.file_service import FileService
+from services.user_service import UserService
+from dto.dto import *
+from utils.database import get_db
 import asyncio
 
 router = APIRouter(prefix='/file', tags=['file'])
@@ -50,18 +50,7 @@ async def upload_files(
 
         except Exception as e:
             raise HTTPException(status_code=400, detail=f"Upload failed: {str(e)}")        
-                
-                
-        # db insert
-        file_key = f'{request.session.get('user_email')}/{request_body.file_name}'
-        
-        file_service.insert_db_file(
-            user_id=request.session.get('user_email'),
-            key=file_key,
-            file_url=file_url
-        )
-
-        return    
+                                
     except Exception as e:
         raise HTTPException(status_code=400, detail=e)
     
