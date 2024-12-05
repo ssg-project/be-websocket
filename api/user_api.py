@@ -6,7 +6,7 @@ from ..utils.database import get_db
 
 router = APIRouter(prefix='/auth', tags=['user'])
 
-@router.login('/login', description='로그인')
+@router.post('/login', description='로그인')
 async def login(
     request: Request,
     request_body: UserLoginReqeust,
