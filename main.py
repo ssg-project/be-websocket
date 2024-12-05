@@ -1,5 +1,6 @@
 from fastapi import FastAPI
-from api.file_api import router as storage_router
+from api.file_api import router as file_router
+from api.user_api import router as user_router
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.middleware.cors import CORSMiddleware
 
@@ -20,7 +21,8 @@ app.add_middleware( # session middleware
 )
 
 # router 설정
-app.include_router(storage_router, prefix="/api/v1", tags=["storage"])
+app.include_router(file_router, prefix="/api/v1", tags=["file"])
+app.include_router(user_router, prefix="/api/v1", tags=["user"])
 
 @app.get("/")
 async def read_root():
