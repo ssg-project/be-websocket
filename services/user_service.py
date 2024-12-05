@@ -5,7 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship
 from sqlalchemy import Column, Integer, String, ForeignKey, TIMESTAMP, func
 
-class StorageService:
+class UserService:
     def __init__(self, db: Session):
         self.db = db
 
