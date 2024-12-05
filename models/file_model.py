@@ -6,9 +6,9 @@ Base = declarative_base()
 class File(Base):
     __tablename__ = "files"
 
-    id = Column(BigInteger, primary_key=True, index=True)
-    storage_id = Column(BigInteger, ForeignKey("storages.id", ondelete="CASCADE"), nullable=False)
-    file_name = Column(String(2048), nullable=False)
-    created_at = Column(TIMESTAMP, server_default=func.now())
+    id = Column(BigInteger, primary_key=True, autoincrement=True)
+    user_id = Column(BigInteger, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    file_url = Column(String(2048), nullable=False)
+    created_at = Column(TIMESTAMP, server_default=func.current_timestamp())
 
-    storage = relationship("Storage", back_populates="files")
+    user = relationship("User", back_populates="files")

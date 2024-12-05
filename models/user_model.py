@@ -6,9 +6,9 @@ Base = declarative_base()
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(BigInteger, primary_key=True, index=True)
+    id = Column(BigInteger, primary_key=True, autoincrement=True)
     email = Column(String(255), unique=True, nullable=False)
     password = Column(String(255), nullable=False)
-    storage_id = Column(Integer, ForeignKey("storages.id", ondelete="CASCADE"), unique=True)
+    created_at = Column(TIMESTAMP, server_default=func.current_timestamp())
 
-    storage = relationship("Storage", back_populates="user", cascade="all, delete orphan")
+    files = relationship("File", back_populates="user", cascade="all, delete-orphan")
