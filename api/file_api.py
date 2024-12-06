@@ -7,52 +7,6 @@ import asyncio
 
 router = APIRouter(prefix='/file', tags=['file'])
 
-# @router.post('/upload', description='파일 업로드')
-# async def upload_files(
-#     request: Request,
-#     request_body: FileUploadRequest,
-#     db: Session = Depends(get_db),
-# ):
-#     file_service = FileService(db)
-
-#     try:
-#         file_list = []
-                
-#         try:
-#             # S3 업로드 병렬 처리
-#             results = await asyncio.gather(
-#                 *(file_service.upload_s3_file(
-#                     file_name=file.file_name,
-#                     file_content=file.file_content,
-#                    ) for file in request_body
-#                 ),
-#                 return_exceptions=True
-#             )
-
-#             # 성공한 파일만 필터링
-#             user_id = request.session.get('user_id')
-#             user_email = request.session.get('user_email')
-
-#             for result in results:
-#                 if isinstance(result, dict):
-#                     file_list.append({
-#                         "user_id": user_id,
-#                         "key": f"{user_email}/{result['file_name']}",
-#                         "file_url": result["file_url"]
-#                     })
-
-#             # DB에 파일 정보 저장
-#             if file_list:
-#                 file_service.insert_db_files(file_list)
-
-#             return
-
-#         except Exception as e:
-#             raise HTTPException(status_code=400, detail=f"Upload failed: {str(e)}")        
-                                
-#     except Exception as e:
-#         raise HTTPException(status_code=400, detail=e)
-
 @router.post('/upload', description='파일 업로드')
 async def upload_files(
     request: Request,
@@ -107,14 +61,11 @@ def delete_files(
     file_service = FileService(db)
 
     try:
-        print(request.session.get('user_id'))
-        print(request_body.file_ids)
         # db get files
         files = file_service.get_files_by_file_ids(
             user_id=request.session.get('user_id'),
             file_ids=request_body.file_ids,
         )
-        print(files)
         file_names = [file['file_key'] for file in files]
        
         # db delete

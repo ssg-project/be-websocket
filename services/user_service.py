@@ -86,4 +86,3 @@ if __name__ == '__main__':
         user = relationship("User", back_populates="files")
     
     new_user = User(email='a', password='b')
-    print(new_user)

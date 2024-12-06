@@ -55,9 +55,7 @@ class FileService:
 
     def delete_s3_files(self, file_names: list[str]):
         s3_objects = [{'Key': file_name} for file_name in file_names]
-        print(s3_objects)
         try:
-            print(00000)
             s3_response = self.s3_client.delete_objects(
                 Bucket=self.bucket_name,
                 Delete={
@@ -65,9 +63,7 @@ class FileService:
                     'Quiet': True
                 }
             )
-            print(1111111)
-            print(s3_response)
-            
+           
             if s3_response['ResponseMetadata']['HTTPStatusCode'] == 200:
                 return
             else:
