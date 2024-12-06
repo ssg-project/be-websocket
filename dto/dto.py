@@ -11,9 +11,6 @@ class UserJoinRequest(BaseModel):
     email: str
     password: str
 
-class UserDeleteRequest(BaseModel):
-    user_id: int
-
 ### file    
 class FileUploadedItem(BaseModel):
     file_name: str

@@ -53,13 +53,13 @@ def join(
     
 @router.post('/withdrawal', description='회원 탈퇴')
 def withdrawal(
-    request_body: UserDeleteRequest,
+    request: Request,
     db: Session = Depends(get_db),
 ):
     user_service = UserService(db)
 
     try:
-        user_service.delete_db_user(id=request_body.user_id)
+        user_service.delete_db_user(user_id=request.session.get('user_id'))
         return
     except Exception as e:
         raise HTTPException(status_code=400, detail=e)
