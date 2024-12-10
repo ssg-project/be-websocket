@@ -19,8 +19,8 @@ async def upload_files(
         file_list = []
                 
         try:
-            user_id = request.session.get('user_id')
-            user_email = request.session.get('user_email')
+            user_id = request.cookies.get('user_id')
+            user_email = request.cookies.get('user_email')
 
             # S3 업로드 병렬 처리
             results = await asyncio.gather(
@@ -63,7 +63,7 @@ def delete_files(
     try:
         # db get files
         files = file_service.get_files_by_file_ids(
-            user_id=request.session.get('user_id'),
+            user_id=request.cookies.get('user_id'),
             file_ids=request_body.file_ids,
         )
         file_names = [file['file_key'] for file in files]
@@ -87,7 +87,7 @@ def get_files(
 
     try:
         # db get files
-        files = file_service.get_files(user_id=request.session.get('user_id'))
+        files = file_service.get_files(user_id=request.cookies.get('user_id'))
         return GetFileListResponse(data=files)
     except Exception as e:
         raise HTTPException(status_code=400, detail=e)

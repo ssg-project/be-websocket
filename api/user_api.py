@@ -13,14 +13,16 @@ def login(
     db: Session = Depends(get_db),
 ):
     user_service = UserService(db)
+    print(request_body)
 
     try:
         user = user_service.get_user_by_email(email=request_body.email)
+        print(user)
         if user.password == request_body.password:
-            request.session['user_id'] = user.id
-            request.session['user_email'] = user.email
+            request.cookies['user_id'] = user.id
+            request.cookies['user_email'] = user.email
             
-            return
+            return {'user_id': user.id, 'user_email': user.email}
         else:
             raise HTTPException(status_code=401, detail="로그인 실패")
     except Exception as e:
@@ -31,8 +33,8 @@ def logout(
     request: Request,
 ):
     try:
-        del request.session['user_id']
-        del request.session['user_email']
+        del request.cookies['user_id']
+        del request.cookies['user_email']
         
         return
     except Exception as e:
