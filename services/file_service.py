@@ -1,3 +1,4 @@
+#storage-server/services/file_service.py
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 from models.model import File
@@ -113,3 +114,21 @@ class FileService:
             return files_to_dict
         except SQLAlchemyError as e:
             raise Exception(f"Database error during deletion: {str(e)}")
+
+    def generate_presigned_url(self, file_key: str, expiration: int = 30):
+        """
+        S3 객체에 대한 presigned URL 생성
+        :param file_key: S3 객체 키
+        :param expiration: URL 만료 시간(초)
+        :return: presigned URL
+        """
+
+        try:
+            url = self.s3_client.generate_presigned_url(
+                'get_object',
+                Params={'Bucket': self.bucket_name, 'Key': file_key},
+                ExpiresIn=expiration
+            )
+            return url
+        except :
+            raise Exception(f"Failed to generate presigned URL")

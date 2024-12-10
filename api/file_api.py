@@ -1,3 +1,4 @@
+#storage-server/api/file_api.py
 from fastapi import APIRouter, Depends, HTTPException, Request, File, UploadFile
 from sqlalchemy.orm import Session
 from services.file_service import FileService
@@ -91,3 +92,18 @@ def get_files(
         return GetFileListResponse(data=files)
     except Exception as e:
         raise HTTPException(status_code=400, detail=e)
+
+@router.get('/download', description='파일 다운로드 링크 생성')
+def get_presigned_url(
+    file_key: str,
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    file_service = FileService(db)
+
+    try:
+        # Presigned URL 생성
+        presigned_url = file_service.generate_presigned_url(file_key=file_key)
+        return {"url": presigned_url}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to generate download link: {str(e)}")
