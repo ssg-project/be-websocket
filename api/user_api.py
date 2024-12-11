@@ -17,7 +17,6 @@ def login(
 
     try:
         user = user_service.get_user_by_email(email=request_body.email)
-        print(user)
         if user.password == request_body.password:
             request.cookies['user_id'] = user.id
             request.cookies['user_email'] = user.email
