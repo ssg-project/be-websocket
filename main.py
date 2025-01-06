@@ -21,7 +21,6 @@ app.add_middleware( # session middleware
 )
 
 # router 설정
-app.include_router(file_router, prefix="/api/v1", tags=["file"])
 app.include_router(user_router, prefix="/api/v1", tags=["user"])
 
 @app.get("/")

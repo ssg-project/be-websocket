@@ -13,7 +13,6 @@ def login(
     db: Session = Depends(get_db),
 ):
     user_service = UserService(db)
-    print(request_body)
 
     try:
         user = user_service.get_user_by_email(email=request_body.email)
