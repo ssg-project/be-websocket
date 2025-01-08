@@ -1,4 +1,4 @@
-piVersion: apps/v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ticketing-server-deployment
@@ -14,7 +14,10 @@ spec:
     spec:
       containers:
       - name: ticketing-server
-        image: nginx # todo : 이미지 이름
+        image: ticketing-server-image:latest
         imagePullPolicy: Always
         ports:
-          - containerPort: 8080
+          - containerPort: 8000
+        envFrom:
+          - secretRef:
+              name: ticketing-server-secret
