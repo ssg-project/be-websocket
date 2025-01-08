@@ -1,5 +1,5 @@
 # python 버전 선택
-FROM python:3.9.19
+FROM --platform=linux/amd64 python:3.9.19
 
 # 작업 디렉토리 설정
 WORKDIR /app
