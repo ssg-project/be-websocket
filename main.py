@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-from api.file_api import router as file_router
 from api.user_api import router as user_router
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.middleware.cors import CORSMiddleware
