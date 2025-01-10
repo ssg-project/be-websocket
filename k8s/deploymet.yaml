@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: ticketing-server
-        image: ticketing-server-image:latest
+        image: 569934397842.dkr.ecr.us-east-1.amazonaws.com/ticketing-web:latest
         imagePullPolicy: Always
         ports:
           - containerPort: 8000
