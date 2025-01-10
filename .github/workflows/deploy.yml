@@ -39,21 +39,8 @@ jobs:
           docker build --platform=linux/amd64 -t $PUBLIC_ECR_URI:$IMAGE_TAG .
           docker push $PUBLIC_ECR_URI:$IMAGE_TAG
 
-      - name: Configure AWS credentials for EKS
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-northeast-1
-
       - name: Update kube config
         run: aws eks update-kubeconfig --name ${{ env.EKS_CLUSTER }} --region ap-northeast-1
-
-      - name: Debug AWS and kubectl
-        run: |
-          aws sts get-caller-identity
-          aws eks get-token --cluster-name ${{ env.EKS_CLUSTER }} --region ap-northeast-1
-          kubectl config get-contexts
 
       - name: Deploy to EKS
         env:
