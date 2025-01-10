@@ -15,10 +15,13 @@ spec:
     spec:
       containers:
       - name: ticketing-server
-        image: public.ecr.aws/v3g6g4v7/ticketing-server:latest
+        image: IMAGE_TAG
         imagePullPolicy: Always
         ports:
-        - containerPort: 8000
+          - containerPort: 8000
+        envFrom:
+          - secretRef:
+              name: ticketing-server-secret
         volumeMounts:
         - name: ticketing-server-secrets-volume
           mountPath: "/etc/secrets"
@@ -32,6 +35,3 @@ spec:
             memory: "512Mi"
       volumes:
       - name: ticketing-server-secrets-volume
-        secret:
-          secretName: ticketing-server-secrets
-
