@@ -1,14 +1,14 @@
 name: Deploy to AWS EKS
 on:
   push:
-    branches: [ workflow ]
+    branches: [ main ]
   pull_request:
-    branches: [ workflow ]
+    branches: [ main ]
 
 env:
-  AWS_REGION: us-east-1
-  EKS_CLUSTER: cluster-prac
-  K8S_NAMESPACE: ticketing-server
+  AWS_REGION: ap-northeast-1
+  EKS_CLUSTER: test-eks
+  K8S_NAMESPACE: ticketing
 
 jobs:
   deploy:
@@ -25,7 +25,7 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ env.AWS_REGION }}
+        aws-region: us-east-1
 
     - name: Login to Amazon ECR
       id: login-ecr
