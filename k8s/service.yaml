@@ -4,8 +4,12 @@ metadata:
   name: ticketing-server
   annotations:
     service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+  namespace: ticketing
 spec:
+  type: ClusterIP
   selector:
     app: ticketing-server
   ports:
-  - port: 8080
+  - port: 8000       # 서비스 포트도 8000으로 변경
+    targetPort: 8000 # 컨테이너 포트와 일치
+    protocol: TCP

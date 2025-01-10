@@ -2,8 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ticketing-server-deployment
+  namespace: ticketing
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: ticketing-server
@@ -21,3 +22,16 @@ spec:
         envFrom:
           - secretRef:
               name: ticketing-server-secret
+        volumeMounts:
+        - name: ticketing-server-secrets-volume
+          mountPath: "/etc/secrets"
+          readOnly: true
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+      volumes:
+      - name: ticketing-server-secrets-volume
