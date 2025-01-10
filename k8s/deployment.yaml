@@ -19,6 +19,10 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 8000
+        volumeMounts:
+        - name: ticketing-server-secrets-volume
+          mountPath: "/etc/secrets"
+          readOnly: true
         resources:
           requests:
             cpu: "250m"
@@ -26,3 +30,8 @@ spec:
           limits:
             cpu: "500m"
             memory: "512Mi"
+      volumes:
+      - name: ticketing-server-secrets-volume
+        secret:
+          secretName: ticketing-server-secrets
+
