@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from api.user_api import router as user_router
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.middleware.cors import CORSMiddleware
+# from utils.logstash_middleware import LoggingMiddleware
 
 app = FastAPI()
 
@@ -18,6 +19,8 @@ app.add_middleware( # session middleware
     SessionMiddleware,
     secret_key="your_secret_key", # env 파일로 옮길 예정
 )
+
+# app.add_middleware(LoggingMiddleware)
 
 # router 설정
 app.include_router(user_router, prefix="/api/v1", tags=["user"])
