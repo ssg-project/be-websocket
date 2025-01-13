@@ -29,6 +29,6 @@ def create_logger(logger_name):
     # stash = logstash.TCPLogstashHandler('{host}', 5044, version=1)
     # stash.setFormatter(log_format)
     # logger.addHandler(stash)
-    logger.addHandler(logstash.TCPLogstashHandler('localhost', 5044, version=1))
+    logger.addHandler(logstash.TCPLogstashHandler('10.0.1.105', 5044, version=1))
 
     return logger
