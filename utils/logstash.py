@@ -15,15 +15,12 @@ def create_logger(logger_name):
 
     # handler 별로 다른 level 설정
     console.setLevel(logging.INFO)
-    # file_handler.setLevel(logging.DEBUG)
 
     # handler 출력 format 지정
     console.setFormatter(log_format)
-    # file_handler.setFormatter(log_format)
 
     # logger에 handler 추가
     logger.addHandler(console)
-    # logger.addHandler(file_handler)
 
     # logstash에 TCP로 전송하는 핸들러
     # stash = logstash.TCPLogstashHandler('{host}', 5044, version=1)
