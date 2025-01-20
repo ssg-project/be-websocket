@@ -1,7 +1,7 @@
-from fastapi import FastAPI
-from api.user_api import router as user_router
-from starlette.middleware.sessions import SessionMiddleware
+from fastapi import FastAPI, HTTPException, Request, Websocket, WebSocketDisconnect
+from fastapi.responses import JSONResponse
 from starlette.middleware.cors import CORSMiddleware
+import json
 
 app = FastAPI()
 
@@ -14,14 +14,33 @@ app.add_middleware( # cors middleware
     allow_headers=["*"],
 )
 
-app.add_middleware( # session middleware
-    SessionMiddleware,
-    secret_key="your_secret_key", # env 파일로 옮길 예정
-)
+connected_clients = set()
 
-# router 설정
-app.include_router(user_router, prefix="/api/v1", tags=["user"])
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: Websocket):
+    await websocket.accept()
+    connected_clients.add(websocket)
+    try:
+        while True:
+            # 클라이언트로부터 메시지를 수신
+            message = await websocket.receive_text()
+            print(f"Received message from client: {message}")
+    except WebSocketDisconnect:
+        connected_clients.remove(websocket)
+        print("Client disconnected")
 
-@app.get("/")
-async def read_root():
-    return {"message": "Hello World"}
+@app.post("/broadcast")
+async def broadcast_message(data: dict):
+    """
+    WebSocket 클라이언트들에게 브로드캐스트
+    """
+    if not connected_clients:
+        return JSONResponse(status_code=400, content={"message": "No clients connected"})
+    message = data.get("message") or data
+    for client in connected_clients:
+        try:
+            await client.send_json(message)
+        except Exception as e:
+            print(f"Failed to send message to client: {e}")
+            connected_clients.remove(client)
+    return {"status": "success", "message": "Message broadcasted successfully"}
