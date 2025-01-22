@@ -1,4 +1,3 @@
-
 # python 버전 선택
 FROM --platform=linux/amd64 python:3.9.19
 
