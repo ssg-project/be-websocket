@@ -15,6 +15,14 @@ app.add_middleware( # cors middleware
 
 connected_clients = {}
 
+async def broadcast_message(message: str):
+    for client_id, websocket in connected_clients.items():
+        try:
+            await websocket.send_text(message)
+        except Exception as e:
+            print(f"Failed to send message to client {client_id}: {e}")
+
+
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
@@ -25,6 +33,9 @@ async def websocket_endpoint(websocket: WebSocket):
         while True:
             message = await websocket.receive_text()
             print(f"Received message from client: {message}")
+
+            await broadcast_message(message)
+            print(f"send message from client: {message}")
     except WebSocketDisconnect:
         del connected_clients[client_id]
         print("Client disconnected")
