@@ -15,6 +15,10 @@ app.add_middleware( # cors middleware
 
 connected_clients = {}
 
+@app.get("/health")
+async def health_check():
+    return {"status": "ok"}
+
 async def broadcast_message(message: str):
     for client_id, websocket in connected_clients.items():
         try:
