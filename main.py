@@ -1,6 +1,6 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from starlette.middleware.cors import CORSMiddleware
-from prometheus_fastapi_instrumentator import Instrumentator
+#from prometheus_fastapi_instrumentator import Instrumentator
 import uvicorn
 
 app = FastAPI()
@@ -51,7 +51,7 @@ async def websocket_endpoint(websocket: WebSocket):
             del connected_clients[client_id]
         print(f"Client {client_id} removed. Total clients: {len(connected_clients)}")
         
-Instrumentator().instrument(app).expose(app)
+#Instrumentator().instrument(app).expose(app)
 
 if __name__ == "__main__":
     uvicorn.run(app="main:app", host="0.0.0.0", port=9000, reload=True)
