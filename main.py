@@ -28,7 +28,7 @@ async def broadcast_message(message: str):
             print(f"Failed to send message to client {client_id}: {e}")
 
 
-@app.websocket("/ws")
+@app.websocket("/")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     client_id = id(websocket)
