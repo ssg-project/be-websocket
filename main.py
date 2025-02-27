@@ -58,7 +58,7 @@ async def websocket_endpoint(websocket: WebSocket):
         del connected_clients[client_id]
         logger.info("Client disconnected")
     except Exception as e:
-        logger.info(f"Error with client {client_id}: {e}")
+        logger.error(f"Error with client {client_id}: {e}")
     finally:
         if client_id in connected_clients:
             del connected_clients[client_id]
