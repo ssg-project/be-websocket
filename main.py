@@ -3,20 +3,28 @@ from starlette.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
 import uvicorn
 import logging
+import os
+
+# Kubernetes 환경에서 파드 및 노드 정보 가져오기
+pod_name = os.environ.get("POD_NAME", "unknown-pod")
+node_name = os.environ.get("NODE_NAME", "unknown-node")
+
+logger = logging.getLogger("websocket")
+
+logger.setLevel(logging.INFO)
+
+# 중복 핸들러 방지
+if not logger.hasHandlers():
+    handler = logging.StreamHandler()
+    formatter = logging.Formatter(
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s "
+        f"{{pod: {pod_name}, node: {node_name}}}"  # pod_name, node_name 직접 추가
+    )
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+
 
 app = FastAPI()
-
-# 로깅 설정
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - websocket-service - %(name)s - %(levelname)s - %(message)s",
-    handlers=[logging.StreamHandler()]
-)
-
-
-logger = logging.getLogger(__name__)
-
-
 
 # middleware 설정
 app.add_middleware( # cors middleware
@@ -67,4 +75,4 @@ async def websocket_endpoint(websocket: WebSocket):
 Instrumentator().instrument(app).expose(app)
 
 if __name__ == "__main__":
-    uvicorn.run(app="main:app", host="0.0.0.0", port=9000, reload=True)
+    uvicorn.run(app="main:app", host="0.0.0.0", port=9000, reload=True, log_config=None, log_level="info")
